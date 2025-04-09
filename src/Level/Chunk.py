@@ -73,7 +73,7 @@ class Chunk(Entity):
 			self.load_blocks(positions)
 
 	# FIXME сделать более нормальную загрузку блоков
-	def load_blocks(self, positions, batch_size=8):
+	def load_blocks(self, positions, batch_size=CHUNK_SIZE*CHUNK_SIZE*CHUNK_HEIGHT):
 		for _ in range(batch_size):
 			if positions:
 				global_pos, block_type = positions.pop()

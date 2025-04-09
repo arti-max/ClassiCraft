@@ -79,6 +79,9 @@ class World:
 		global Level_BLocks_List
 		Level_BLocks_List = [entry for entry in Level_BLocks_List if entry[:3] != list(position)]
 
+	def local_to_map(self, data) -> Vec3:
+		return Vec3(round(data.x), math.floor(data.y)+1, round(data.z))
+
 	# == main loop == #
 	def update(self):
 		self.update_chunks()
@@ -91,7 +94,12 @@ class World:
 		print(f"{hit_info.hit} | {hit_info.point} | {hit_info.world_point} | {hit_info.normal}")
 		if hit_info.hit and hit_info.entity:
 			print(f"Material: {hit_info.entity._Type}")
-			position = Vec3(round(hit_info.point.x), round(hit_info.point.y), round(hit_info.point.z)) + hit_info.normal
+
+			position = hit_info.point - hit_info.normal
+			position = self.local_to_map(position)
+			Entity(position=position, model='cube', color=color.red, scale=0.8)
+
+			#position = Vec3(round(hit_info.point.x), round(hit_info.point.y)-1, round(hit_info.point.z)) + hit_info.normal
 			print(f"Position: {position}")
 			chunk_coords = self.get_chunk_position(position)
 			self.logger.log(f"CHUNK COORDS {chunk_coords}")
